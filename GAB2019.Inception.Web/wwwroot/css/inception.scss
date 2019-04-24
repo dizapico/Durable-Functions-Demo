@@ -1,0 +1,48 @@
+﻿@import "scss/_colors.scss";
+
+#dashboard-container {
+    align-items: stretch;
+    justify-content: space-between;
+
+    .kpi-container {
+        align-self: stretch !important;
+        padding: 10px;
+        height: auto;
+        box-sizing: border-box;
+
+        .kpi-content {
+            box-sizing: border-box;
+            box-shadow: rgba(0,0,0,0.20) 2px 5px 15px;
+            padding: 20px;
+            background: $color-kpi-bg;
+            color: $color-kpi-fg;
+        }
+
+        .kpi-title {
+            font-size: 17pt;
+            font-weight: lighter;
+            text-align: right;
+        }
+
+        .kpi-value {
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 60pt;
+            font-weight: bold;
+            /*word-break: break-word;
+            word-wrap: hyphenate;*/
+            text-overflow: ellipsis;
+            text-align: center;
+            white-space: nowrap;
+            color: $color-kpi-value-fg;
+        }
+    }
+}
+
+
+#images-container {
+    img {
+        box-shadow: rgba(0,0,0,0.20) 2px 5px 15px;
+        margin: 10px;
+    }
+}

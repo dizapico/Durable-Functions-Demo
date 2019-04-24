@@ -1,0 +1,33 @@
+﻿#dashboard-container {
+  align-items: stretch;
+  justify-content: space-between; }
+  #dashboard-container .kpi-container {
+    align-self: stretch !important;
+    padding: 10px;
+    height: auto;
+    box-sizing: border-box; }
+    #dashboard-container .kpi-container .kpi-content {
+      box-sizing: border-box;
+      box-shadow: rgba(0, 0, 0, 0.2) 2px 5px 15px;
+      padding: 20px;
+      background: #f3f3f3;
+      color: #3d3d3d; }
+    #dashboard-container .kpi-container .kpi-title {
+      font-size: 17pt;
+      font-weight: lighter;
+      text-align: right; }
+    #dashboard-container .kpi-container .kpi-value {
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 60pt;
+      font-weight: bold;
+      /*word-break: break-word;
+            word-wrap: hyphenate;*/
+      text-overflow: ellipsis;
+      text-align: center;
+      white-space: nowrap;
+      color: #44e164; }
+
+#images-container img {
+  box-shadow: rgba(0, 0, 0, 0.2) 2px 5px 15px;
+  margin: 10px; }
