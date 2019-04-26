@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace GAB2019.Inception.Web.Middleware
 {
-    public class AzureStorage
+    public class AzureStorageService
     {
 
-        public static bool IsImage(IFormFile file)
+        public bool IsImage(IFormFile file)
         {
             if (file.ContentType.Contains("image"))
             {
@@ -26,21 +26,12 @@ namespace GAB2019.Inception.Web.Middleware
             return formats.Any(item => file.FileName.EndsWith(item, StringComparison.OrdinalIgnoreCase));
         }
 
-        public static async Task<bool> UploadFileToStorage(Stream fileStream, string fileName, AzureStorageSettings storageConfig)
+        public async Task<bool> UploadFileToStorage(Stream fileStream, string fileName, AzureStorageSettings storageConfig)
         {
-            // Create storagecredentials object by reading the values from the configuration (appsettings.json)
             StorageCredentials storageCredentials = new StorageCredentials(storageConfig.AccountName, storageConfig.AccountKey);
-
-            // Create cloudstorage account by passing the storagecredentials
             CloudStorageAccount storageAccount = new CloudStorageAccount(storageCredentials, true);
-
-            // Create the blob client.
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-
-            // Get reference to the blob container by passing the name by reading the value from the configuration (appsettings.json)
-            CloudBlobContainer container = blobClient.GetContainerReference(storageConfig.ImageContainer);
-
-            // Get the reference to the block blob from the container
+            CloudBlobContainer container = blobClient.GetContainerReference(storageConfig.InputContainer);
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
 
             // Upload the file
@@ -49,24 +40,26 @@ namespace GAB2019.Inception.Web.Middleware
             return await Task.FromResult(true);
         }
 
-        public static async Task<List<string>> GetThumbNailUrls(AzureStorageSettings storageConfig)
+        public async Task<List<string>> GetThumbNailUrls (AzureStorageSettings storageConfig)
+        {
+            var blobUrls = await GetContainerBlobUrls(storageConfig, storageConfig.ThumbnailContainer);
+            return blobUrls;
+        }
+
+        public async Task<List<string>> GetCameraImagesUrls(AzureStorageSettings storageConfig)
+        {
+            var blobUrls = await GetContainerBlobUrls(storageConfig, storageConfig.ImageContainer);
+            return blobUrls;
+        }
+
+        public async Task<List<string>> GetContainerBlobUrls(AzureStorageSettings storageConfig, string containerName)
         {
             List<string> thumbnailUrls = new List<string>();
-
-            // Create storagecredentials object by reading the values from the configuration (appsettings.json)
             StorageCredentials storageCredentials = new StorageCredentials(storageConfig.AccountName, storageConfig.AccountKey);
-
-            // Create cloudstorage account by passing the storagecredentials
             CloudStorageAccount storageAccount = new CloudStorageAccount(storageCredentials, true);
-
-            // Create blob client
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-
-            // Get reference to the container
-            CloudBlobContainer container = blobClient.GetContainerReference(storageConfig.ThumbnailContainer);
-
+            CloudBlobContainer container = blobClient.GetContainerReference(containerName);
             BlobContinuationToken continuationToken = null;
-
             BlobResultSegment resultSegment = null;
 
             //Call ListBlobsSegmentedAsync and enumerate the result segment returned, while the continuation token is non-null.

@@ -1,8 +1,8 @@
 {
   "IsEncrypted": false,
   "Values": {
-    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=[STORAGE_ACCOUNT];AccountKey=[STORAGE_KEY];BlobEndpoint=[BLOB_ENDPOINT];TableEndpoint=[TABLE_ENDPOINT];QueueEndpoint=[QUEUE_ENDPOINT];FileEndpoint=[FILE_ENDPOINT]",
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=inceptionstg;AccountKey=tu89tqHqymSRNaINi+4lOsztueIhazAtOGFMkE+iNCH5/EW1TubJ6BCTABWHp0ppyGv8zo7qzLxN32/Qv157fQ==;BlobEndpoint=https://inceptionstg.blob.core.windows.net/;TableEndpoint=https://inceptionstg.table.core.windows.net/;QueueEndpoint=https://inceptionstg.queue.core.windows.net/;FileEndpoint=https://inceptionstg.file.core.windows.net/",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "StorageSettings:BlobContainerConnection": "DefaultEndpointsProtocol=https;AccountName=[ACCOUNT_NAME];AccountKey=[ACCOUNT_KEY]"
+    "StorageSettings:BlobContainerConnection": "DefaultEndpointsProtocol=https;AccountName=inceptionstg;AccountKey=tu89tqHqymSRNaINi+4lOsztueIhazAtOGFMkE+iNCH5/EW1TubJ6BCTABWHp0ppyGv8zo7qzLxN32/Qv157fQ==;EndpointSuffix=core.windows.net"
   }
 }

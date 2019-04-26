@@ -4,13 +4,17 @@
     <AzureFunctionsVersion>v2</AzureFunctionsVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.DurableTask" Version="1.7.1" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.0" />
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.24" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.DurableTask" Version="1.8.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.5" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.27" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="local - Copy.settings.Debug.json">
+      <DependentUpon>local.settings.json</DependentUpon>
+      <IsTransformFile>true</IsTransformFile>
     </None>
     <None Update="local.settings.Debug.json">
       <IsTransformFile>true</IsTransformFile>
@@ -20,10 +24,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
       <TransformOnBuild>true</TransformOnBuild>
-    </None>
-    <None Update="local.settings.Release.json">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>local.settings.json</DependentUpon>
     </None>
   </ItemGroup>
 </Project>
