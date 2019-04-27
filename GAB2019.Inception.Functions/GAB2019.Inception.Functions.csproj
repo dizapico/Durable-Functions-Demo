@@ -31,7 +31,9 @@
       <IsTransformFile>true</IsTransformFile>
       <DependentUpon>local.settings.json</DependentUpon>
     </None>
-    <None Update="local.settings.original.json">
+
+    <None Update="local.settings.default.json">
+
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
       <TransformOnBuild>true</TransformOnBuild>
