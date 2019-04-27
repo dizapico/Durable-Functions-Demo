@@ -13,7 +13,7 @@ namespace GAB2019.Inception.DurableFunction
     public static partial class InceptionOrchestrator
     {
         [FunctionName("InceptionOrchestrator")]
-        public static async Task  RunOrchestrator(
+        public static async Task RunOrchestrator(
             [OrchestrationTrigger] DurableOrchestrationContext context,
             ILogger log)
         {
@@ -25,8 +25,20 @@ namespace GAB2019.Inception.DurableFunction
             if (notification != null)
             {
                 await context.CallActivityAsync("InceptionOrchestrator_StoreNotification", notification);
+                await context.CallActivityAsync("InceptionOrchestrator_NotifyUser", notification);
             }
             bool findDiego = await context.CallActivityAsync<bool>("FindDiegoFunction", fileName);
+            if (!findDiego)
+            {
+                var alert = new Notification
+                {
+                    ImageURL = $"https://inceptionstg.blob.core.windows.net/inception-input/{fileName}",
+                    Level = 1,
+                    Message = "No es diego, es Carmen de Mairena"
+                };
+                await context.CallActivityAsync("InceptionOrchestrator_StoreNotification", alert);
+                await context.CallActivityAsync("InceptionOrchestrator_NotifyUser", notification);
+            }
 
         }
 
@@ -53,9 +65,8 @@ namespace GAB2019.Inception.DurableFunction
 
         [FunctionName("InceptionOrchestrator_BlobLauncher")]
         public static async Task Run([BlobTrigger("inception-input/{name}",
-            Connection = "StorageSettings:BlobContainerConnection")]Stream imageSrc,
+            Connection = "StorageSettings:BlobContainerConnection")]Stream imageSrc, string name,
             [OrchestrationClient]DurableOrchestrationClient starter,
-            string name,
             ILogger log)
         {
             string instanceId = await starter.StartNewAsync("InceptionOrchestrator", name);
