@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using GAB2019.Inception.Model;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
@@ -20,9 +21,11 @@ namespace GAB2019.Inception.DurableFunction
 
             var fileName = context.GetInput<string>();
 
-            await context.CallActivityAsync("InceptionOrchestrator_AnalyzeImageCognitiveServices", fileName);
-            //await context.CallActivityAsync("InceptionOrchestrator_SaveAnalysisInformation", fileName);
-
+            var notification = await context.CallActivityAsync<Notification>("InceptionOrchestrator_AnalyzeImageCognitiveServices", fileName);
+            if (notification != null)
+            {
+                await context.CallActivityAsync("InceptionOrchestrator_StoreNotification", notification);
+            }
         }
 
         [FunctionName("InceptionOrchestrator_Hello")]
