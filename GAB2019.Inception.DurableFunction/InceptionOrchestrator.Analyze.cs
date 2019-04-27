@@ -6,13 +6,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using System.Collections.Generic;
+using GAB2019.Inception.Model;
 
 namespace GAB2019.Inception.DurableFunction
 {
     public static partial class InceptionOrchestrator
     {
         [FunctionName("InceptionOrchestrator_AnalyzeImageCognitiveServices")]
-        public static async Task AnalyzeImage([ActivityTrigger]string fileName,
+        public static async Task<Notification> AnalyzeImage([ActivityTrigger]string fileName,
             ILogger log)
         {
             try
@@ -38,11 +39,18 @@ namespace GAB2019.Inception.DurableFunction
 
                 ImageAnalysis analysis = await computerVision.AnalyzeImageAsync(imageUrl, features);
 
+                var notification = new Notification
+                {
+                    ImageURL = imageUrl,
+                    Level = 0,
+                    Message = analysis.Description.Captions[0].Text
+                };
+                return notification;
             }
             catch (Exception e)
             {
                 log.LogInformation(e.Message);
-                //document = null;
+                return null;
             }
         }
 
