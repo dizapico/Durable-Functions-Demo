@@ -14,7 +14,9 @@ namespace GAB2019.Inception.Functions
     public static class FindDiegoFunction
     {
         [FunctionName("FindDiegoFunction")]
+
         public static bool FindDiego([ActivityTrigger]string fileName, ILogger log)
+
         {
             try
             {
@@ -70,6 +72,8 @@ namespace GAB2019.Inception.Functions
                     {
                         foundDiego = foundDiego || similar.confidence >= 0.75;
                     }
+
+                    
 
                 }
                 return foundDiego;
