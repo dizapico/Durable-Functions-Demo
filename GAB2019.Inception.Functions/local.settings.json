@@ -5,6 +5,10 @@
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "StorageSettings:BlobContainerConnection": "DefaultEndpointsProtocol=https;AccountName=[ACCOUNT_NAME];AccountKey=[ACCOUNT_KEY]",
     "StorageSettings:CosmosDBInception_FunctionsDB": "AccountEndpoint=[ACCOUNT_ENDPOINT];AccountKey=[ACCOUNT_KEY];",
-    "SendGridApiKey": "API-KEY"
+    "SendGridApiKey": "API-KEY",
+    "CognitiveServicesSettings:URIBase": "https://[location].api.cognitive.microsoft.com/",
+    "CognitiveServicesSettings:SubscriptionKey": "[KEY]",
+    "FaceAPISettings:SubscriptionKey": "[SUBSCRIPTION-KEY]",
+    "FaceAPISettings:URIBase": "[FACEAPI-URIBASE]"
   }
 }

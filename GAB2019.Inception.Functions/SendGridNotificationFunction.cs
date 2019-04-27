@@ -16,9 +16,7 @@ namespace GAB2019.Inception.Functions
         public static void Run([CosmosDBTrigger(
             databaseName: "Inception-FunctionsDB",
             collectionName: "AlertsToSend",
-            ConnectionStringSetting = "StorageSettings:CosmosDBInception_FunctionsDB",
-            LeaseCollectionName = "lease",
-            CreateLeaseCollectionIfNotExists = true
+            ConnectionStringSetting = "StorageSettings:CosmosDBInception_FunctionsDB"
             )]IReadOnlyList<Document> input, ILogger log,[SendGrid(ApiKey = "SendGridApiKey")] out SendGridMessage message)
         {
             Alert alert = JsonConvert.DeserializeObject<Alert>(input[0].ToString());

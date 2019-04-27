@@ -10,7 +10,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GAB2019.Inception.Functions
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GAB2019.Inception.Web", "GAB2019.Inception.Web\GAB2019.Inception.Web.csproj", "{3444ACFB-E43E-4E7D-9E81-0E10BC5A0A18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAB2019.Inception.Model", "GAB2019.Inception.Model\GAB2019.Inception.Model.csproj", "{CA5778FD-0FED-4540-A738-2AFE652CA3B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GAB2019.Inception.Model", "GAB2019.Inception.Model\GAB2019.Inception.Model.csproj", "{CA5778FD-0FED-4540-A738-2AFE652CA3B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
