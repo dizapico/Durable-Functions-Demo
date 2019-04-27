@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GAB2019.Inception.Web.Models.Configuration;
 using GAB2019.Inception.Web.Models.Storage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +34,8 @@ namespace GAB2019.Inception.Web
             });
 
             services.Configure<AzureStorageSettings>(Configuration.GetSection("AzureStorageSettings"));
+            services.Configure<NotificationSettings>(Configuration.GetSection("NotificationsSettings"));
+            services.Configure<CosmosSettings>(Configuration.GetSection("CosmosSettings"));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

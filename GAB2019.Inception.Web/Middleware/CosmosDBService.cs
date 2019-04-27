@@ -1,4 +1,5 @@
-﻿using GAB2019.Inception.Web.Models.CosmosDb;
+﻿using GAB2019.Inception.Web.Models.Configuration;
+using GAB2019.Inception.Web.Models.CosmosDb;
 using Microsoft.Azure.Documents.Client;
 using System;
 using System.Collections.Generic;
@@ -11,17 +12,19 @@ namespace GAB2019.Inception.Web.Middleware
     {
         private DocumentClient documentDBClient;
         private string database;
+        private CosmosSettings cosmosSettings;
 
-        public CosmosDBService()
+        public CosmosDBService(CosmosSettings cosmosSettings)
         {
+            this.cosmosSettings = cosmosSettings;
             this.documentDBClient = GetDocumentDBClient();
-            this.database = Environment.GetEnvironmentVariable("Cosmos:Database", EnvironmentVariableTarget.Process);
+            this.database = cosmosSettings.Database;
         }
 
         public DocumentClient GetDocumentDBClient()
         {
-            string endpointUrl = Environment.GetEnvironmentVariable("Cosmos:Endpoint", EnvironmentVariableTarget.Process);
-            string primaryKey = Environment.GetEnvironmentVariable("Cosmos:PrimaryKey", EnvironmentVariableTarget.Process);
+            string endpointUrl = cosmosSettings.EndPoint;
+            string primaryKey = cosmosSettings.PrimaryKey;
             var client = new DocumentClient(new Uri(endpointUrl), primaryKey);
 
             return client;
@@ -29,7 +32,7 @@ namespace GAB2019.Inception.Web.Middleware
 
         public List<Notification> GetNotifications(int level)
         {
-            string collection = Environment.GetEnvironmentVariable("Cosmos:NotificationsCollection", EnvironmentVariableTarget.Process);
+            string collection = cosmosSettings.NotificationsCollection;
             var collectionLink = UriFactory.CreateDocumentCollectionUri(database, collection);
 
             var list = this.documentDBClient.CreateDocumentQuery<Notification>(collectionLink, new FeedOptions { EnableCrossPartitionQuery = true })
