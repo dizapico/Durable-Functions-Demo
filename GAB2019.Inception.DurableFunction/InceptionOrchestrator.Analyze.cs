@@ -11,7 +11,7 @@ namespace GAB2019.Inception.DurableFunction
 {
     public static partial class InceptionOrchestrator
     {
-        [FunctionName("InceptionOrchestrator_AnalyzeImageCognitiveServicesFunction")]
+        [FunctionName("InceptionOrchestrator_AnalyzeImageCognitiveServices")]
         public static async Task AnalyzeImage([ActivityTrigger]string fileName,
             ILogger log)
         {
@@ -29,17 +29,12 @@ namespace GAB2019.Inception.DurableFunction
                 // Specify the features to return
                 List<VisualFeatureTypes> features =
                     new List<VisualFeatureTypes>() {
-                                                        VisualFeatureTypes.Categories, VisualFeatureTypes.Description,
-                                                        VisualFeatureTypes.Faces, VisualFeatureTypes.ImageType,
-                                                        VisualFeatureTypes.Tags
-                                                    };
-
-                if (!Uri.IsWellFormedUriString(imageUrl, UriKind.Absolute))
-                {
-                    Console.WriteLine(
-                        "\nInvalid remoteImageUrl:\n{0} \n", imageUrl);
-                    return;
-                }
+                        VisualFeatureTypes.Categories,
+                        VisualFeatureTypes.Description,
+                        VisualFeatureTypes.Faces,
+                        VisualFeatureTypes.ImageType,
+                        VisualFeatureTypes.Tags
+                    };
 
                 ImageAnalysis analysis = await computerVision.AnalyzeImageAsync(imageUrl, features);
 

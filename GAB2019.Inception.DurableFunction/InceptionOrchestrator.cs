@@ -20,7 +20,8 @@ namespace GAB2019.Inception.DurableFunction
 
             var fileName = context.GetInput<string>();
 
-            await context.CallActivityAsync("InceptionOrchestrator_AnalyzeImageCognitiveServicesFunction", fileName);
+            await context.CallActivityAsync("InceptionOrchestrator_AnalyzeImageCognitiveServices", fileName);
+            //await context.CallActivityAsync("InceptionOrchestrator_SaveAnalysisInformation", fileName);
 
         }
 
