@@ -6,6 +6,7 @@ using Microsoft.Azure.Documents;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace GAB2019.Inception.Functions
@@ -13,12 +14,12 @@ namespace GAB2019.Inception.Functions
     public static class FindDiegoFunction
     {
         [FunctionName("FindDiegoFunction")]
-        public static void Run(string ImageURL, ILogger log)
+        public static string Run([ActivityTrigger]string ImageURL, ILogger log)
         {
             try
             {
                 string subscriptionKey = Environment.GetEnvironmentVariable("FaceAPISettings:SubscriptionKey");
-                string faceAPIDetectServiceURI = Environment.GetEnvironmentVariable("FaceAPISettings:URIBase") + "/face/v1.0/detect";
+                string faceAPIDetectServiceURI = Environment.GetEnvironmentVariable("FaceAPISettings:URIBase") + "/detect";
 
                 HttpClient client = new HttpClient();
 
@@ -29,22 +30,65 @@ namespace GAB2019.Inception.Functions
                 string uri = faceAPIDetectServiceURI + "?" + requestParameters;
 
                 HttpResponseMessage response;
-                StringContent stringContent = new StringContent(new JProperty("url",ImageURL).ToString());
+                StringContent stringContent = new StringContent(new JObject(new JProperty("url", ImageURL)).ToString());
 
-                    stringContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    stringContent.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
 
                     response = client.PostAsync(uri, stringContent).Result;
                 
 
                 string contentString = response.Content.ReadAsStringAsync().Result;
 
-               // document = JsonConvert.DeserializeObject<ImageObjects>(contentString);
+                 FaceId[] faceIds = JsonConvert.DeserializeObject<FaceId[]>(contentString);
+                FaceId faceId;
+                if (faceIds.Length > 0)
+                {
+                    faceId = faceIds[0];
 
+                    client = new HttpClient();
+
+                    client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
+
+
+                    uri = Environment.GetEnvironmentVariable("FaceAPISettings:URIBase") + "/findsimilars";
+                    //client.DefaultRequestHeaders.Add("Content-Type", "application/json");
+                    JObject body = new JObject(new JProperty("faceId", faceId.faceId));
+                    body.Add(new JProperty("faceListId", "diegofacelist"));
+                    stringContent = new StringContent(body.ToString());
+                    stringContent.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json"); 
+
+
+                    response = client.PostAsync(uri, stringContent).Result;
+
+
+                    contentString = response.Content.ReadAsStringAsync().Result;
+
+                    Similars[] similars = JsonConvert.DeserializeObject<Similars[]>(contentString);
+                    bool foundDiego = false;
+                    foreach(var similar in similars)
+                    {
+                        foundDiego = foundDiego || similar.confidence >= 0.75;
+                    }
+
+                }
+                return "";
             }
             catch(Exception e)
             {
                 log.LogInformation(e.Message);
+                return "";
             }
         }
+    }
+
+    public class FaceId
+    {
+        public string faceId { get; set; }
+    }
+
+    public class Similars
+    {
+        public string persistedFaceId { get; set; }
+        public double confidence { get; set; }
     }
 }
