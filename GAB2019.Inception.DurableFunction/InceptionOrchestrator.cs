@@ -26,6 +26,8 @@ namespace GAB2019.Inception.DurableFunction
             {
                 await context.CallActivityAsync("InceptionOrchestrator_StoreNotification", notification);
             }
+            bool findDiego = await context.CallActivityAsync<bool>("FindDiegoFunction", fileName);
+
         }
 
         [FunctionName("InceptionOrchestrator_Hello")]

@@ -16,7 +16,7 @@ namespace GAB2019.Inception.Functions
     {
         
         [FunctionName("AnalyzeImageCognitiveServicesFunction")]
-        public static void Run([BlobTrigger("inception-input/{name}", Connection = "StorageSettings:BlobContainerConnection")]Stream image, string name,
+        public static void Run([ActivityTrigger]Stream image, string name,
             [CosmosDB(
                 databaseName: "Inception-FunctionsDB",
                 collectionName: "CamImageObjectsFound",
