@@ -12,15 +12,12 @@ namespace GAB2019.Inception.Functions
     public static class FindLeoFunction
     {
         [FunctionName("FindLeoFunction")]
-        public static void Run([CosmosDBTrigger(
-            databaseName: "Inception-FunctionsDB",
-            collectionName: "CamImageObjectsFound",
-            ConnectionStringSetting = "StorageSettings:CosmosDBInception_FunctionsDB")]IReadOnlyList<Document> input, ILogger log)
+        public static void Run([ActivityTrigger] string JsonObjects, ILogger log)
         {
             try
             {
                 bool foundLeo = false;
-                ImageObjects imageData = JsonConvert.DeserializeObject<ImageObjects>(input[0].ToString());
+                ImageObjects imageData = JsonConvert.DeserializeObject<ImageObjects>(JsonObjects);
                 foreach (var obj in imageData.objects)
                 {
                     foundLeo = foundLeo || FindLeo(obj);

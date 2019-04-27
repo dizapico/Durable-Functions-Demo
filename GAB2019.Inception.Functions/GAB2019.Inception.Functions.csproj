@@ -11,6 +11,7 @@
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.0" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.24" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Sendgrid" Version="9.11.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GAB2019.Inception.Model\GAB2019.Inception.Model.csproj" />
@@ -23,12 +24,12 @@
       <IsTransformFile>true</IsTransformFile>
       <DependentUpon>local.settings.json</DependentUpon>
     </None>
-    <None Update="local.settings.json">
+    <None Update="local.settings.original.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
       <TransformOnBuild>true</TransformOnBuild>
     </None>
-    <None Update="local.settings.secrets.json">
+    <None Update="local.settings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="local.settings.Release.json">

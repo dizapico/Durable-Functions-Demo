@@ -1,14 +1,14 @@
 {
   "IsEncrypted": false,
   "Values": {
-    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=[STORAGE_ACCOUNT];AccountKey=[STORAGE_KEY];BlobEndpoint=[BLOB_ENDPOINT];TableEndpoint=[TABLE_ENDPOINT];QueueEndpoint=[QUEUE_ENDPOINT];FileEndpoint=[FILE_ENDPOINT]",
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=inceptionstg;AccountKey=tu89tqHqymSRNaINi+4lOsztueIhazAtOGFMkE+iNCH5/EW1TubJ6BCTABWHp0ppyGv8zo7qzLxN32/Qv157fQ==;EndpointSuffix=core.windows.net",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "StorageSettings:BlobContainerConnection": "DefaultEndpointsProtocol=https;AccountName=[ACCOUNT_NAME];AccountKey=[ACCOUNT_KEY]",
-    "StorageSettings:CosmosDBInception_FunctionsDB": "AccountEndpoint=[ACCOUNT_ENDPOINT];AccountKey=[ACCOUNT_KEY];",
-    "SendGridApiKey": "API-KEY",
-    "CognitiveServicesSettings:URIBase": "https://[location].api.cognitive.microsoft.com/",
-    "CognitiveServicesSettings:SubscriptionKey": "[KEY]",
-    "FaceAPISettings:SubscriptionKey": "[SUBSCRIPTION-KEY]",
-    "FaceAPISettings:URIBase": "[FACEAPI-URIBASE]"
+    "StorageSettings:BlobContainerConnection": "DefaultEndpointsProtocol=https;AccountName=inceptionstg;AccountKey=tu89tqHqymSRNaINi+4lOsztueIhazAtOGFMkE+iNCH5/EW1TubJ6BCTABWHp0ppyGv8zo7qzLxN32/Qv157fQ==;EndpointSuffix=core.windows.net",
+    "StorageSettings:CosmosDBInception_FunctionsDB": "AccountEndpoint=https://inception.documents.azure.com:443/;AccountKey=CEROZiKwgemHJsrwRZTrUvjeAjZ5iUZLMTBSxxXO660VXFrKjojeKa8ur2aR0ZOv5KqLslYKdfz9bonPJjElhQ==;",
+    "SendGridApiKey": "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",
+    "CognitiveServicesSettings:URIBase": "https://westeurope.api.cognitive.microsoft.com/",
+    "CognitiveServicesSettings:SubscriptionKey": "d9888663f06941d3b21e7f6abb958a3d",
+    "FaceAPISettings:SubscriptionKey": "94f86608d7d64617ba82331ce0bf6407",
+    "FaceAPISettings:URIBase": "https://westeurope.api.cognitive.microsoft.com/face/v1.0"
   }
 }

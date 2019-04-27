@@ -14,10 +14,11 @@ namespace GAB2019.Inception.Functions
     public static class FindDiegoFunction
     {
         [FunctionName("FindDiegoFunction")]
-        public static string Run([ActivityTrigger]string ImageURL, ILogger log)
+        public static bool FindDiego([ActivityTrigger]string ImageURL, ILogger log)
         {
             try
             {
+                bool foundDiego = false;
                 string subscriptionKey = Environment.GetEnvironmentVariable("FaceAPISettings:SubscriptionKey");
                 string faceAPIDetectServiceURI = Environment.GetEnvironmentVariable("FaceAPISettings:URIBase") + "/detect";
 
@@ -51,7 +52,6 @@ namespace GAB2019.Inception.Functions
 
 
                     uri = Environment.GetEnvironmentVariable("FaceAPISettings:URIBase") + "/findsimilars";
-                    //client.DefaultRequestHeaders.Add("Content-Type", "application/json");
                     JObject body = new JObject(new JProperty("faceId", faceId.faceId));
                     body.Add(new JProperty("faceListId", "diegofacelist"));
                     stringContent = new StringContent(body.ToString());
@@ -64,19 +64,21 @@ namespace GAB2019.Inception.Functions
                     contentString = response.Content.ReadAsStringAsync().Result;
 
                     Similars[] similars = JsonConvert.DeserializeObject<Similars[]>(contentString);
-                    bool foundDiego = false;
+                    
                     foreach(var similar in similars)
                     {
                         foundDiego = foundDiego || similar.confidence >= 0.75;
                     }
 
+                    
+
                 }
-                return "";
+                return foundDiego;
             }
             catch(Exception e)
             {
                 log.LogInformation(e.Message);
-                return "";
+                return false;
             }
         }
     }
