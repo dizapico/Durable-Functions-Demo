@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
@@ -8,21 +9,19 @@ using Microsoft.Extensions.Logging;
 
 namespace GAB2019.Inception.DurableFunction
 {
-    public static class InceptionOrchestrator
+    public static partial class InceptionOrchestrator
     {
         [FunctionName("InceptionOrchestrator")]
-        public static async Task<List<string>> RunOrchestrator(
-            [OrchestrationTrigger] DurableOrchestrationContext context)
+        public static async Task  RunOrchestrator(
+            [OrchestrationTrigger] DurableOrchestrationContext context,
+            ILogger log)
         {
-            var outputs = new List<string>();
+            log.LogInformation($" **** Started orchestration with ID = {context.InstanceId} ****");
 
-            // Replace "hello" with the name of your Durable Activity Function.
-            outputs.Add(await context.CallActivityAsync<string>("InceptionOrchestrator_Hello", "Tokyo"));
-            outputs.Add(await context.CallActivityAsync<string>("InceptionOrchestrator_Hello", "Seattle"));
-            outputs.Add(await context.CallActivityAsync<string>("InceptionOrchestrator_Hello", "London"));
+            var imageSrc = context.GetInput<Stream>();
 
-            // returns ["Hello Tokyo!", "Hello Seattle!", "Hello London!"]
-            return outputs;
+            await context.CallActivityAsync("InceptionOrchestrator_AnalyzeImageCognitiveServicesFunction", imageSrc);
+
         }
 
         [FunctionName("InceptionOrchestrator_Hello")]
@@ -45,5 +44,18 @@ namespace GAB2019.Inception.DurableFunction
 
             return starter.CreateCheckStatusResponse(req, instanceId);
         }
+
+        [FunctionName("InceptionOrchestrator_BlobLauncher")]
+        public static async Task Run([BlobTrigger("inception-input/{name}",
+            Connection = "StorageSettings:BlobContainerConnection")]Stream imageSrc,
+            [OrchestrationClient]DurableOrchestrationClient starter,
+            string name,
+            ILogger log)
+        {
+            string instanceId = await starter.StartNewAsync("InceptionOrchestrator", imageSrc);
+
+            log.LogInformation($" **** Orchestration with ID {instanceId} ended ****");
+        }
+
     }
 }
