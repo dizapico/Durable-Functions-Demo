@@ -1,54 +1,48 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using GAB2019.Inception.Model;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
+using System.Collections.Generic;
 
 namespace GAB2019.Inception.DurableFunction
 {
     public static partial class InceptionOrchestrator
     {
-        [FunctionName("InceptionOrchestrator_AnalyzeImageCognitiveServicesFunction")]
-        public static void AnalyzeImage([ActivityTrigger]Stream image,
-            [CosmosDB(
-                databaseName: "Inception-FunctionsDB",
-                collectionName: "CamImageObjectsFound",
-                ConnectionStringSetting = "StorageSettings:CosmosDBInception_FunctionsDB")]out ImageObjects document,
+        [FunctionName("InceptionOrchestrator_AnalyzeImageCognitiveServices")]
+        public static async Task AnalyzeImage([ActivityTrigger]string fileName,
             ILogger log)
         {
             try
             {
+                log.LogInformation($" ---- Start analyzing image ----");
+
                 string subscriptionKey = Environment.GetEnvironmentVariable("CognitiveServicesSettings:SubscriptionKey");
-                string analyzeServiceURI = Environment.GetEnvironmentVariable("CognitiveServicesSettings:URIBase") + "vision/v2.0/analyze";
-                string requestParameters = "visualFeatures=Objects";
-                string uri = analyzeServiceURI + "?" + requestParameters;
-                byte[] byteData = GetImageAsByteArray(image);
-                HttpClient client = new HttpClient();
-                HttpResponseMessage response;
+                ComputerVisionClient computerVision = new ComputerVisionClient(
+                    new ApiKeyServiceClientCredentials(subscriptionKey),
+                    new System.Net.Http.DelegatingHandler[] { });
+                computerVision.Endpoint = "https://westeurope.api.cognitive.microsoft.com/";
 
-                client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
+                var imageUrl = $"https://inceptionstg.blob.core.windows.net/inception-input/{fileName}";
+                // Specify the features to return
+                List<VisualFeatureTypes> features =
+                    new List<VisualFeatureTypes>() {
+                        VisualFeatureTypes.Categories,
+                        VisualFeatureTypes.Description,
+                        VisualFeatureTypes.Faces,
+                        VisualFeatureTypes.ImageType,
+                        VisualFeatureTypes.Tags
+                    };
 
-                using (ByteArrayContent content = new ByteArrayContent(byteData))
-                {
-                    content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                    response = client.PostAsync(uri, content).Result;
-                }
+                ImageAnalysis analysis = await computerVision.AnalyzeImageAsync(imageUrl, features);
 
-                string contentString = response.Content.ReadAsStringAsync().Result;
-
-                document = JsonConvert.DeserializeObject<ImageObjects>(contentString);
             }
             catch (Exception e)
             {
                 log.LogInformation(e.Message);
-                document = null;
+                //document = null;
             }
         }
 

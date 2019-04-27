@@ -18,9 +18,10 @@ namespace GAB2019.Inception.DurableFunction
         {
             log.LogInformation($" **** Started orchestration with ID = {context.InstanceId} ****");
 
-            var imageSrc = context.GetInput<Stream>();
+            var fileName = context.GetInput<string>();
 
-            await context.CallActivityAsync("InceptionOrchestrator_AnalyzeImageCognitiveServicesFunction", imageSrc);
+            await context.CallActivityAsync("InceptionOrchestrator_AnalyzeImageCognitiveServices", fileName);
+            //await context.CallActivityAsync("InceptionOrchestrator_SaveAnalysisInformation", fileName);
 
         }
 
@@ -52,7 +53,7 @@ namespace GAB2019.Inception.DurableFunction
             string name,
             ILogger log)
         {
-            string instanceId = await starter.StartNewAsync("InceptionOrchestrator", imageSrc);
+            string instanceId = await starter.StartNewAsync("InceptionOrchestrator", name);
 
             log.LogInformation($" **** Orchestration with ID {instanceId} ended ****");
         }
