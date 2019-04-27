@@ -12,6 +12,9 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.24" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="Sendgrid" Version="9.11.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.DurableTask" Version="1.8.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.5" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.27" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GAB2019.Inception.Model\GAB2019.Inception.Model.csproj" />
@@ -19,6 +22,10 @@
   <ItemGroup>
     <None Update="host.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="local - Copy.settings.Debug.json">
+      <DependentUpon>local.settings.json</DependentUpon>
+      <IsTransformFile>true</IsTransformFile>
     </None>
     <None Update="local.settings.Debug.json">
       <IsTransformFile>true</IsTransformFile>

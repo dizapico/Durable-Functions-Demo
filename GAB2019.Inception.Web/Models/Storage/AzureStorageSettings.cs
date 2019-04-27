@@ -10,6 +10,7 @@ namespace GAB2019.Inception.Web.Models.Storage
         public string AccountName { get; set; }
         public string AccountKey { get; set; }
         public string QueueName { get; set; }
+        public string InputContainer { get; set; }
         public string ImageContainer { get; set; }
         public string ThumbnailContainer { get; set; }
     }

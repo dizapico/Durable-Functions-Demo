@@ -14,11 +14,13 @@ namespace GAB2019.Inception.Web.Controllers
     public class ImageController : Controller
     {
         // make sure that appsettings.json is filled with the necessary details of the azure storage
-        private readonly AzureStorageSettings storageConfig = null;
+        private AzureStorageSettings storageConfig = null;
+        private AzureStorageService storageService;
 
         public ImageController(IOptions<AzureStorageSettings> config)
         {
-            storageConfig = config.Value;
+            this.storageConfig = config.Value;
+            this.storageService = new AzureStorageService();
         }
 
         [HttpGet]
@@ -44,13 +46,13 @@ namespace GAB2019.Inception.Web.Controllers
 
                 foreach (var formFile in files)
                 {
-                    if (AzureStorage.IsImage(formFile))
+                    if (storageService.IsImage(formFile))
                     {
                         if (formFile.Length > 0)
                         {
                             using (Stream stream = formFile.OpenReadStream())
                             {
-                                isUploaded = await AzureStorage.UploadFileToStorage(stream, formFile.FileName, storageConfig);
+                                isUploaded = await storageService.UploadFileToStorage(stream, formFile.FileName, storageConfig);
                             }
                         }
                     }
@@ -87,7 +89,7 @@ namespace GAB2019.Inception.Web.Controllers
                 if (storageConfig.ImageContainer == string.Empty)
                     return BadRequest("Please provide a name for your image container in the azure blob storage");
 
-                List<string> thumbnailUrls = await AzureStorage.GetThumbNailUrls(storageConfig);
+                List<string> thumbnailUrls = await storageService.GetThumbNailUrls(storageConfig);
 
                 return new ObjectResult(thumbnailUrls);
             }

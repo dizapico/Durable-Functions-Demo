@@ -1,0 +1,73 @@
+﻿@model GAB2019.Inception.Web.Models.NotificationsViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<nav>
+    <div class="nav nav-pills" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-notifications-tab" data-toggle="tab" href="#nav-notifications" role="tab" aria-controls="nav-notifications" aria-selected="true">
+            Notifications
+        </a>
+        <a class="nav-item nav-link" id="nav-alerts-tab" data-toggle="tab" href="#nav-alerts" role="tab" aria-controls="nav-alerts" aria-selected="false">
+            Alerts
+        </a>
+    </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-notifications" role="tabpanel" aria-labelledby="nav-notifications-tab">
+
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr class="bg-warning">
+                        <th>#</th>
+                        <th>Message</th>
+                        <th>Image</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model.Notifications)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.Message</td>
+                                <td>@item.ImageUrl</td>
+                            </tr>
+                        }
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="nav-alerts" role="tabpanel" aria-labelledby="nav-alerts-tab">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr class="bg-danger">
+                        <th>#</th>
+                        <th>Message</th>
+                        <th>Image</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model.Alerts)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.Message</td>
+                                <td>@item.ImageUrl</td>
+                            </tr>
+                        }
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

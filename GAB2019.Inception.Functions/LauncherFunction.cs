@@ -1,6 +1,5 @@
 using System.IO;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 
 namespace GAB2019.Inception.Functions
@@ -8,13 +7,16 @@ namespace GAB2019.Inception.Functions
     public static class LauncherFunction
     {
         [FunctionName("LauncherFunction")]
-        public static void Run([BlobTrigger("inception-files/{name}",
-            Connection = "StorageSettings:BlobContainerConnection")]Stream myBlob,
-            [Blob("inception-files/processed/thumb-{name}", FileAccess.Write)] Stream imageSmall,
+        //[StorageAccount("FunctionLevelStorageAppSetting")]
+        public static void Run([BlobTrigger("inception-input/{name}",
+            Connection = "StorageSettings:BlobContainerConnection")]Stream imageSrc,
+            [Blob("inception-thumbnails/sm-{name}", FileAccess.Write)] Stream imageSmall,
             string name,
             ILogger log)
         {
-            log.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {myBlob.Length} Bytes");
+            imageSrc.CopyTo(imageSmall);
+
+            log.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {imageSrc.Length} Bytes");
         }
 
         //[FunctionName("BlobTriggerCSharp")]
@@ -22,5 +24,7 @@ namespace GAB2019.Inception.Functions
         //{
         //    log.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {myBlob.Length} Bytes");
         //}
+
+
     }
 }
